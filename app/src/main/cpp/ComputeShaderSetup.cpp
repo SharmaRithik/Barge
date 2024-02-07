@@ -17,10 +17,9 @@ int main() {
     auto device = easyvk::Device(instance, physicalDevices.at(0));
     std::cout << "Using device: " << device.properties.deviceName << "\n";
 
-    // Define buffers for matrices A, B, and C
-    auto matrixA = easyvk::Buffer(device, A_ROWS * A_COLS, sizeof(float));
-    auto matrixB = easyvk::Buffer(device, A_COLS * B_COLS, sizeof(float));
-    auto matrixC = easyvk::Buffer(device, A_ROWS * B_COLS, sizeof(float));
+    auto matrixA = easyvk::Buffer(device, A_ROWS * A_COLS * sizeof(float));
+    auto matrixB = easyvk::Buffer(device, A_COLS * B_COLS * sizeof(float));
+    auto matrixC = easyvk::Buffer(device, A_ROWS * B_COLS * sizeof(float));
 
     // Initialize matrices A and B with example values and clear matrix C
     // In a real scenario, you would populate A and B with actual data
