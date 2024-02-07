@@ -24,10 +24,10 @@ int main() {
     // Initialize matrices A and B with example values and clear matrix C
     // In a real scenario, you would populate A and B with actual data
     for (int i = 0; i < A_ROWS * A_COLS; i++) {
-        matrixA.store<float>(i, 1.0f); // Example data
+        matrixA.store(i, 1.0f); // Example data
     }
     for (int i = 0; i < A_COLS * B_COLS; i++) {
-        matrixB.store<float>(i, 2.0f); // Example data
+        matrixB.store(i, 2.0f); // Example data
     }
     matrixC.clear();
 
