@@ -32,7 +32,7 @@ int main() {
     matrixC.clear();
 
     // Assuming the shader file is at "path/to/matrix.spv"
-    const char* shaderPath = "/home/riksharm/Barge/app/src/main/cpp/matrix.spv";
+    const char* shaderPath = "/home/riksharm/Barge/app/src/main/shaders/matrix.spv";
     std::vector<easyvk::Buffer> buffers = {matrixA, matrixB, matrixC};
 
     // Load the shader and create a program
