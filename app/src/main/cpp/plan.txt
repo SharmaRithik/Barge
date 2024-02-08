@@ -1,0 +1,73 @@
+----- Use case ------
+
+test the use case? It doesn't perform well on cpu side
+
+----- Storage formats (CSR sparse*dense , BSR) -----
+* benchmark conversion to csr and bsr
+* sparse * sparse ( WIP ), I can play with the other sparse matrix, and make it dense.
+
+
+Image = matrix(flatten it 2D or 1D)
+Layer 1 -
+
+Prune the model to certain percentage = 95%
+Layer 80% dense -> Condensa -> 35%dense(sparsity increased)
+
+---- Application ------
+Sparse Model
+
+----- real part ------
+Camera - > Image dense - check sparsity (output the percentage) -> if(sparse) -> reorder the data CSR,
+
+Check sparsity
+If this is layer or weights
+
+change the order of the data, and then I need to store it.
+Multiplying
+Adding
+
+
+
+ 
+Sparse network, layer1*weights(sparse*dense), one check for sparsity 
+
+
+
+
+
+
+* matrix 1X3200, a lot of linear algebra(matrix * weights + bias) = forms the new layer,
+* load the data, structure the data into different shape, (Cifar is 3D -> time requrired to make it to 1D)
+- Pipeline 
+
+Matrix_seondlayer = 
+matrix 1 = 
+matrix 2 =  
+
+----- Interference app ----------
+Improve the backend, support all the operations
+CPU baseline
+GPU baseline
+
+Friday:
+CPU and GPU Implementation:
+GLSL Shader
+C++ (no manual packages added)
+
+Compute Shader for CPU matrix, various number of threads.
+Compute Shader for GPU matrix, various number of blocksizes.
+
+Tuesday:
+App linked with backend:
+
+Wednesday:
+Get results for redwood meeting:
+
+-------- one week ---------
+
+Sparse Linear Algebra - 
+
+
+
+------- second week -------
+Maybe: Cpp -> Cuda code

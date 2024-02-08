@@ -22,32 +22,38 @@ int main() {
     auto matrixC = easyvk::Buffer(device, A_ROWS * B_COLS * sizeof(float));
 
     // Initialize matrices A and B with example values and clear matrix C
-    // In a real scenario, you would populate A and B with actual data
     for (int i = 0; i < A_ROWS * A_COLS; i++) {
-        matrixA.store(i, 1.0f); // Example data
+        matrixA.store(i, 1.0f); // Example data, assuming 'store' works as intended
     }
     for (int i = 0; i < A_COLS * B_COLS; i++) {
         matrixB.store(i, 2.0f); // Example data
     }
     matrixC.clear();
 
-    // Assuming the shader file is at "path/to/matrix.spv"
     const char* shaderPath = "/home/riksharm/Barge/app/src/main/shaders/matrix.spv";
     std::vector<easyvk::Buffer> buffers = {matrixA, matrixB, matrixC};
 
-    // Load the shader and create a program
     auto program = easyvk::Program(device, shaderPath, buffers);
-
-    // Set workgroups and workgroup size (assuming 1 for simplicity)
     program.setWorkgroups(size);
     program.setWorkgroupSize(1);
 
-    // Run the kernel
-    program.initialize("main"); // Entry point, assuming "main"
+    program.initialize("main"); // Assuming "main" is the correct entry point
     program.run();
 
-    // Optional: Verify the result
-    // Example validation code could go here
+    // Read back the results from matrixC and print them
+    std::vector<float> result(A_ROWS * B_COLS);
+    for (int i = 0; i < A_ROWS * B_COLS; ++i) {
+        result[i] = matrixC.load(i); // Assuming a method to read back data
+    }
+
+    // Print the resulting matrix for verification
+    std::cout << "Resulting Matrix C:" << std::endl;
+    for (int row = 0; row < A_ROWS; ++row) {
+        for (int col = 0; col < B_COLS; ++col) {
+            std::cout << result[row * B_COLS + col] << " ";
+        }
+        std::cout << std::endl;
+    }
 
     // Cleanup
     program.teardown();
