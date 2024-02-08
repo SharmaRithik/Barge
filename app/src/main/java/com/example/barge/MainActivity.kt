@@ -1,9 +1,20 @@
 package com.example.barge
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.barge.ui.theme.BargeTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,30 +33,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.ui.graphics.Color
-import androidx.navigation.NavController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
-import com.example.barge.ui.theme.BargeTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -80,8 +72,8 @@ fun Greeting(navController: NavController) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Barge",
-                style = TextStyle(fontWeight = FontWeight.Bold)
+                text = "Matrix Multiplication Setup",
+                style = MaterialTheme.typography.headlineMedium
             )
             Spacer(modifier = Modifier.size(16.dp))
 
@@ -96,10 +88,10 @@ fun Greeting(navController: NavController) {
             Spacer(modifier = Modifier.size(16.dp))
 
             Button(onClick = {
-                val matrixData = "Rows1: ${rows1.value}, Columns1: ${columns1.value}, Rows2: ${rows2.value}, Columns2: ${columns2.value}"
+                val matrixData = "${rows1.value},${columns1.value},${rows2.value},${columns2.value}"
                 navController.navigate("displayScreen/$matrixData")
             }) {
-                Text("Submit")
+                Text("Generate Matrices")
             }
         }
     }
@@ -129,29 +121,77 @@ fun MatrixInput(rows: MutableState<String>, columns: MutableState<String>) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DisplayScreen(navController: NavController, matrixData: String) {
+    val coreCount = Runtime.getRuntime().availableProcessors()
+    val coreStates = remember { List(coreCount) { mutableStateOf(false) } }
+    val stressCpu = remember { mutableStateOf(false) } // State for the "Stress CPU" checkbox
+
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Display Screen") },
+                title = { Text("Select Configuration") },
                 navigationIcon = {
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
                     }
                 }
-                // Remove the backgroundColor and contentColor if you're using Material 3
             )
         }
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding).padding(16.dp)) {
-            Text(text = "Matrix Data: $matrixData")
+            Text(text = "Size of the Matrices:")
+            val matrixSizes = matrixData.split(",").map { it.trim() }
+            if (matrixSizes.size == 4) {
+                val (rows1, columns1, rows2, columns2) = matrixSizes
+                Text(text = "Matrix 1: $rows1 rows, $columns1 columns")
+                Text(text = "Matrix 2: $rows2 rows, $columns2 columns")
+            } else {
+                Text("Error: Invalid matrix data format.")
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(text = "Running on CPU cores:")
+
+            // Display CPU core checkboxes (unchanged)
+            coreStates.chunked(2).forEachIndexed { chunkIndex, chunk ->
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    chunk.forEachIndexed { index, state ->
+                        val coreIndex = chunkIndex * 2 + index // Correctly calculate the core index
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Checkbox(
+                                checked = state.value,
+                                onCheckedChange = { newState -> state.value = newState }
+                            )
+                            Text(text = "${coreIndex + 1} core(s)")
+                        }
+                    }
+                }
+            }
+
+            // Additional "Stress CPU" checkbox with automatic checking of all CPU checkboxes
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Checkbox(
+                    checked = stressCpu.value,
+                    onCheckedChange = { isChecked ->
+                        stressCpu.value = isChecked
+                        coreStates.forEach { state ->
+                            state.value = isChecked // Automatically check/uncheck all CPU core checkboxes
+                        }
+                    }
+                )
+                Text(text = "Stress CPU")
+            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(text = "Running on GPU:")
         }
     }
 }
 
+
 @Preview(showBackground = true)
 @Composable
-fun GreetingPreview() {
+fun DefaultPreview() {
     BargeTheme {
-        // Preview functionality is limited and cannot show NavController-dependent UI.
+        Greeting(rememberNavController())
     }
 }

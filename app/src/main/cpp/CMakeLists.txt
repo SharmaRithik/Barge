@@ -28,7 +28,7 @@ add_library(${CMAKE_PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
     barge.cpp
     # Add your ComputeShaderSetup.cpp here
-    ComputeShaderSetup.cpp easyvk.cpp)
+    ComputeShaderSetup.cpp easyvk.cpp cpu_MatrixMultiplication.cpp)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
@@ -47,4 +47,12 @@ target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${VULKAN_LIB}/include)
 # If there are specific Vulkan features or extensions you need, you might also need
 # to check for their availability and conditionally compile code based on that.
 # This is just a basic setup to get started with Vulkan in an Android CMake project.
+
+# Find OpenMP
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} ${OpenMP_C_FLAGS}")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${OpenMP_EXE_LINKER_FLAGS}")
+endif()
 
