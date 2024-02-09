@@ -40,6 +40,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ExperimentalMaterial3Api
 
 class MainActivity : ComponentActivity() {
+
+    companion object {
+        init {
+            System.loadLibrary("cpu_MatrixMultiplication")
+        }
+        external fun multiplyMatricesJNI(row1: Int, col1: Int, row2: Int, col2: Int, numThreads: Int): Array<FloatArray>
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -49,6 +56,9 @@ class MainActivity : ComponentActivity() {
                     composable("mainScreen") { Greeting(navController) }
                     composable("displayScreen/{matrixData}") { backStackEntry ->
                         DisplayScreen(navController, backStackEntry.arguments?.getString("matrixData") ?: "")
+                    }
+                    composable("resultsScreen") {
+                        ResultsScreen(navController) // Pass navController as an argument
                     }
                 }
             }
@@ -124,6 +134,8 @@ fun DisplayScreen(navController: NavController, matrixData: String) {
     val coreCount = Runtime.getRuntime().availableProcessors()
     val coreStates = remember { List(coreCount) { mutableStateOf(false) } }
     val stressCpu = remember { mutableStateOf(false) } // State for the "Stress CPU" checkbox
+    val matrixSizes = matrixData.split(",").map { it.trim() }
+    val numThreads = coreStates.count { it.value }
 
     Scaffold(
         topBar = {
@@ -183,10 +195,55 @@ fun DisplayScreen(navController: NavController, matrixData: String) {
 
             Spacer(modifier = Modifier.size(16.dp))
             Text(text = "Running on GPU:")
+
+            Button(onClick = {
+                if (matrixSizes.size == 4) {
+                    val rows1 = matrixSizes[0].toInt()
+                    val columns1 = matrixSizes[1].toInt()
+                    val rows2 = matrixSizes[2].toInt()
+                    val columns2 = matrixSizes[3].toInt()
+                    val result: Array<FloatArray> = MainActivity.multiplyMatricesJNI(rows1.toInt(), columns1.toInt(), rows2.toInt(), columns2.toInt(), numThreads)}
+                else{
+                    // can't think about it rn
+                }
+            }) {
+                Text("Compute Matrices")
+            }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun ResultsScreen(navController: NavController) {
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text("Results") },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(Icons.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+        }
+    ) { innerPadding ->
+        Surface(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "Time Taken",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                // Add more UI elements here as needed to display the results
+            }
+        }
+    }
+}
 
 @Preview(showBackground = true)
 @Composable
