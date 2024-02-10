@@ -24,11 +24,17 @@ project("barge")
 # System.loadLibrary() and pass the name of the library defined here;
 # for GameActivity/NativeActivity derived applications, the same library name must be
 # used in the AndroidManifest.xml file.
-add_library(${CMAKE_PROJECT_NAME} SHARED
+#add_library(${CMAKE_PROJECT_NAME} SHARED
     # List C/C++ source files with relative paths to this CMakeLists.txt.
-    barge.cpp
+    #barge.cpp
     # Add your ComputeShaderSetup.cpp here
-    ComputeShaderSetup.cpp easyvk.cpp cpu_MatrixMultiplication.cpp)
+    #ComputeShaderSetup.cpp easyvk.cpp cpu_MatrixMultiplication.cpp)
+
+add_library(
+        barge
+        SHARED
+        cpu_MatrixMultiplication.cpp easyvk.cpp ComputeShaderSetup.cpp
+)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this

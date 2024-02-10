@@ -1,5 +1,4 @@
 // cpu_MatrixMultiplication.cpp
-#include "cpu_MatrixMultiplication.h"
 #include <algorithm>
 #include <fstream>
 #include <sstream>
@@ -15,17 +14,13 @@ const int TILE_SIZE = 128;
 // Utility function declarations
 std::vector<std::vector<float>> jobjectArrayToVector(JNIEnv* env, jobjectArray array);
 jobjectArray vectorToJobjectArray(JNIEnv* env, const std::vector<std::vector<float>>& matrix);
-
+std::vector<std::vector<float>> readMatrixFromFile(const std::string& filename);
+void multiplyMatrices(const std::vector<std::vector<float>>& mat1, const std::vector<std::vector<float>>& mat2, std::vector<std::vector<float>>& result, int numThreads);
 
 // JNI function updated to create matrices and multiply them
-extern "C" JNIEXPORT jobjectArray JNICALL Java_com_example_barge_MainActivity_00024Companion_multiplyMatricesJNI(
-        JNIEnv* env,
-        jobject /* this */,
-        jint row1,
-        jint col1,
-        jint row2,
-        jint col2,
-        jint numThreads) {
+extern "C"
+JNIEXPORT jobjectArray JNICALL
+Java_com_example_barge_MainActivity_00024Companion_multiplyMatricesJNI(JNIEnv *env, jobject thiz, jint row1, jint col1, jint row2, jint col2, jint numThreads){
 
     // Create matrices based on the given dimensions
     std::vector<std::vector<float>> mat1(row1, std::vector<float>(col1));
@@ -33,7 +28,6 @@ extern "C" JNIEXPORT jobjectArray JNICALL Java_com_example_barge_MainActivity_00
     std::vector<std::vector<float>> result(row1, std::vector<float>(col2, 0.0f)); // Initialize result matrix with correct dimensions
 
     // Fill matrices with sample data (e.g., random or sequential numbers)
-    // For simplicity, let's initialize with sequential numbers (or any pattern you prefer)
     int value = 1;
     for (auto &row : mat1) {
         std::fill(row.begin(), row.end(), value++);
@@ -114,4 +108,10 @@ void multiplyMatrices(const std::vector<std::vector<float>>& mat1, const std::ve
             }
         }
     }
+}
+
+// Example utility function previously in the header
+std::vector<std::vector<float>> readMatrixFromFile(const std::string& filename) {
+    // Implementation to read a matrix from a file, if necessary
+    return {}; // Placeholder implementation
 }
