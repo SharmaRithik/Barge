@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <chrono>
-#include "cpu_MatrixMultiplication.h"
 
 int main() {
   // Set matrix dimensions and number of threads

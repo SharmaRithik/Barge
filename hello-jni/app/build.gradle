@@ -1,11 +1,11 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
 }
 
 android {
-    namespace = "com.example.barge"
-    compileSdk = 34
+    compileSdk 34
+    namespace = "com.example.hellojni"
 
     defaultConfig {
         ndk {
@@ -13,7 +13,7 @@ android {
             // Include the ABIs relevant to your project
         }
 
-        applicationId = "com.example.barge"
+        applicationId = "com.example.hellojni"
         minSdk = 29
         targetSdk = 34
         versionCode = 1
@@ -29,18 +29,18 @@ android {
             }
         }
     }
-
-
-
+    buildFeatures {
+        viewBinding true
+    }
     buildTypes {
         release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'),
+                    'proguard-rules.pro'
         }
+
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -65,9 +65,24 @@ android {
             version = "3.22.1"
         }
     }
+
+    //cmake {
+    //                cppFlags "-std=c++17", "-static-openmp -fopenmp"
+    //            }
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.18.1"
+        }
+    }
+
+    namespace 'com.example.hellojni'
 }
 
 dependencies {
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.7.21"
 
     implementation("androidx.core:core-ktx:1.12.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")

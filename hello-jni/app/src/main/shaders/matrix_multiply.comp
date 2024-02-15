@@ -1,0 +1,43 @@
+#version 450
+
+// Define the workgroup size
+layout(local_size_x = 16, local_size_y = 16, local_size_z = 1) in;
+
+// Buffers for matrix A, B, and the result matrix C
+layout(std430, binding = 0) buffer BufferA {
+    float a[];
+};
+
+layout(std430, binding = 1) buffer BufferB {
+    float b[];
+};
+
+layout(std430, binding = 2) buffer BufferC {
+    float c[];
+};
+
+// Uniform block for matrix dimensions
+layout(std140, binding = 3) uniform MatrixDimensions {
+    int row1;
+    int col1_row2; // Assuming col1 of A == row2 of B for valid matrix multiplication
+    int col2;
+};
+
+void main() {
+    // Get the global thread ID
+    uint gidX = gl_GlobalInvocationID.x;
+    uint gidY = gl_GlobalInvocationID.y;
+
+    // Perform bounds checking to prevent out-of-bounds memory access
+    if (gidX >= uint(col2) || gidY >= uint(row1)) return;
+
+    // Calculate one element of the result matrix C
+    float sum = 0.0;
+    for (int k = 0; k < col1_row2; ++k) {
+        sum += a[gidY * col1_row2 + k] * b[k * col2 + int(gidX)];
+    }
+
+    // Store the computed value in matrix C
+    c[int(gidY) * col2 + int(gidX)] = sum;
+}
+

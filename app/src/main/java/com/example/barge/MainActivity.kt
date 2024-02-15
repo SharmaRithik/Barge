@@ -43,7 +43,8 @@ class MainActivity : ComponentActivity() {
 
     companion object {
         init {
-            System.loadLibrary("cpu_MatrixMultiplication")
+            // Correct way to load the library
+            //System.loadLibrary("cpu_MatrixMultiplication");
         }
         external fun multiplyMatricesJNI(row1: Int, col1: Int, row2: Int, col2: Int, numThreads: Int): Array<FloatArray>
     }

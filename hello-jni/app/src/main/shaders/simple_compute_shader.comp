@@ -1,0 +1,14 @@
+#version 450
+
+// Define the number of workgroups and the number of threads per workgroup
+layout (local_size_x = 1, local_size_y = 1, local_size_z = 1) in;
+
+void main() {
+    // Compute shader logic goes here
+    // For example, you could be processing data, performing calculations, etc.
+    // This shader doesn't do anything but serves as a template
+
+    // The gl_GlobalInvocationID is a built-in variable that gives you the unique ID of the thread
+    uvec3 globalID = gl_GlobalInvocationID;
+}
+

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_hello_jni"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.hellojni.HelloJni">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/scrollInnerLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/hello_textview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+            <!-- Matrix 1 Rows -->
+            <EditText
+                android:id="@+id/matrix1Rows"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Matrix 1 Rows"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"/>
+
+            <!-- Matrix 1 Columns -->
+            <EditText
+                android:id="@+id/matrix1Cols"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Matrix 1 Columns"
+                app:layout_constraintTop_toBottomOf="@id/matrix1Rows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Matrix 2 Rows -->
+            <EditText
+                android:id="@+id/matrix2Rows"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Matrix 2 Rows"
+                app:layout_constraintTop_toBottomOf="@id/matrix1Cols"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Matrix 2 Columns -->
+            <EditText
+                android:id="@+id/matrix2Cols"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:hint="Matrix 2 Columns"
+                app:layout_constraintTop_toBottomOf="@id/matrix2Rows"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+            <!-- Button to Perform Multiplication on CPU -->
+            <Button
+                android:id="@+id/multiplyButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Multiply on CPU"
+                app:layout_constraintTop_toBottomOf="@id/matrix2Cols"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/multiplyButtonGpu"
+                app:layout_constraintWidth_percent="0.5"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"/>
+
+            <!-- Button to Perform Multiplication on GPU -->
+            <Button
+                android:id="@+id/multiplyButtonGpu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Multiply on GPU"
+                app:layout_constraintTop_toBottomOf="@id/matrix2Cols"
+                app:layout_constraintStart_toEndOf="@id/multiplyButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintWidth_percent="0.5"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"/>
+
+
+            <TextView
+                android:id="@+id/validationMessageTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toBottomOf="@id/multiplyButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"/>
+
+            <CheckBox
+                android:id="@+id/loopCheckBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Loop CPU"
+                app:layout_constraintTop_toBottomOf="@id/multiplyButtonGpu"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/loopGpuCheckBox"
+                app:layout_constraintWidth_default="wrap"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <CheckBox
+                android:id="@+id/loopGpuCheckBox"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Loop GPU"
+                app:layout_constraintTop_toBottomOf="@id/multiplyButtonGpu"
+                app:layout_constraintStart_toEndOf="@id/loopCheckBox"
+                app:layout_constraintEnd_toStartOf="@+id/stopButton"
+                app:layout_constraintWidth_default="wrap"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"/>
+
+            <Button
+                android:id="@+id/stopButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stop"
+                app:layout_constraintTop_toBottomOf="@id/multiplyButtonGpu"
+                app:layout_constraintStart_toEndOf="@id/loopGpuCheckBox"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="8dp"/>
+
+
+            <TextView
+                android:id="@+id/resultTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textSize="16sp"
+                android:padding="16dp"
+                android:scrollbars="vertical"
+                app:layout_constraintTop_toBottomOf="@id/stopButton"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:text="Results:" />
+
+            <Button
+                android:id="@+id/clearResultsButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Clear Results"
+                app:layout_constraintTop_toBottomOf="@id/resultTextView"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="16dp"/>
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

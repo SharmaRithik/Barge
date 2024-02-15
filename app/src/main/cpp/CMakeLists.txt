@@ -11,6 +11,10 @@ cmake_minimum_required(VERSION 3.4.1)
 # build script scope).
 project("barge")
 
+
+set(JDK_PATH "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home/include/")
+include_directories(${JDK_PATH}/include)
+include_directories(${JDK_PATH}/include/darwin) # For macOS
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
